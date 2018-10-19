@@ -1,0 +1,6 @@
+{
+  "development": {
+    "PORT": 4000,
+    "JWT_SECRET": "abc123"
+  }
+}

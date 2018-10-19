@@ -1,0 +1,41 @@
+type User {
+  id: ID
+  username: String!
+  studentId: String!
+  password: String!
+  scope: String!
+  tokens: [Token]
+}
+
+type Token {
+  id: ID
+  device: String
+  requestIp: String
+  token: String
+}
+
+type Query {
+  getUserById(id: ID): User!
+  getUsers: [User]
+  checkToken: User!
+}
+
+type Mutation {
+  signup(
+    username: String,
+    studentId: String,
+    password: String,
+    device: String
+  ): User
+  login(
+    studentId: String,
+    password: String,
+    device: String
+  ): User
+  logout: LogoutResponse
+}
+
+
+type LogoutResponse {
+  message: String
+}
