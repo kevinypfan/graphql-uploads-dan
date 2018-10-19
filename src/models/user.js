@@ -12,7 +12,8 @@ const schema = new mongoose.Schema({
     unique: true
   },
   password: {
-    type: String
+    type: String,
+    minlength: [6, 'Minimum 6 characters required!'],
   },
   scope: {
     type: String
