@@ -1,0 +1,30 @@
+enum AllowedSubject{
+    COMPULSORY
+    ELECTIVE
+}
+
+type Teacher {
+    firstname: String!
+    lastname: String!
+}
+
+type CourseTime {
+    start: Int,
+    end: Int
+}
+
+type Course {
+    name: String!
+    teacher: String!
+    class: String!
+    subject: AllowedSubject!
+    campus: String!
+    time: CourseTime!
+    room: String!
+    subjectCode: ID!
+    courseCode: ID!
+    id: ID!
+    accessNumber: Int!
+    selectNumber: Int!
+    credit: Int!
+}

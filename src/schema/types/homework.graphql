@@ -1,0 +1,12 @@
+scalar Date
+
+
+type Homework {
+    id: ID!
+    title: String!
+    description: String
+    courseId: ID!
+    createAt: Date
+    start: Date
+    end: Date
+}

@@ -6,7 +6,6 @@ import {
 
 export default {
   Query: {
-
     checkToken: async (root, args, ctx) => {
       console.log(ctx.user)
       if (await ctx.user === null) {
