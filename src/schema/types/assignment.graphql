@@ -1,0 +1,17 @@
+scalar Upload
+
+
+type Assignment {
+    id: ID!
+    homework: Homework
+    user: User
+    file: Upload
+    score: Int
+}
+
+
+
+
+type Query {
+    assignments: [Assignment]
+}

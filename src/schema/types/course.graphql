@@ -1,3 +1,6 @@
+scalar Upload
+
+
 enum AllowedSubject{
     COMPULSORY
     ELECTIVE
@@ -13,9 +16,16 @@ type CourseTime {
     end: Int
 }
 
+type Student {
+    id: ID
+    studentId: ID
+    name: String
+    class: String
+}
+
 type Course {
     name: String!
-    teacher: String!
+    teacher: Teacher!
     class: String!
     subject: AllowedSubject!
     campus: String!
@@ -27,4 +37,40 @@ type Course {
     accessNumber: Int!
     selectNumber: Int!
     credit: Int!
+    students: [Student]
+}
+
+type Query {
+    Courses: [Course]
+}
+
+input newCourseInput {
+    name: String!
+    teacher: TeacherInput!
+    class: String
+    campus: String!
+    time: CourseTimeInput!
+    room: String!
+    subjectCode: ID!
+    courseCode: ID!
+    accessNumber: Int!
+    selectNumber: Int!
+    credit: Int!
+    studentExcel: Upload!
+}
+
+input TeacherInput {
+    firstname: String!
+    lastname: String!
+}
+
+input CourseTimeInput {
+    start: Int,
+    end: Int
+}
+
+type Mutation {
+    newCourse(
+        data: newCourseInput
+    ): Course
 }
