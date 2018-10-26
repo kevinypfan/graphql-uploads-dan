@@ -3,11 +3,19 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server'
 import schema from './schema'
 import { authentication } from './utilts/authentication'
-import User from './models/user'
+import db from './models/db'
+import initApp from './utilts/initApp'
 
 
 mongoose.connect('mongodb://localhost/danUpload', { useNewUrlParser: true }).then(() => {
   console.log("Connected to Database!")
+  return initApp()
+}).then(user => {
+  if (user.message) {
+    console.log(user.message)
+  } else {
+    console.log(user._id)
+  }
 }).catch((err) => {
   console.log("Not Connected to Database ERROR! ", err);
 });
@@ -16,8 +24,13 @@ mongoose.set('useCreateIndex', true);
 const context = async ({ req, res }) => {
   try {
     const { user, token } = await authentication(req)
-    if (!user) return { req, res, db: { User } }
-    return { req, res, user, token, db: { User } }
+    let ctx;
+    if (!user) {
+      ctx = { req, res, db }
+    } else {
+      ctx = { req, res, user, token, db }
+    }
+    return ctx
   } catch (err) {
     console.log("context error: ", err)
   }

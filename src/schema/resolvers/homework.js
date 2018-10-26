@@ -1,33 +1,29 @@
+import {
+    AuthenticationError,
+    UserInputError,
+    ApolloError,
+    ForbiddenError
+} from 'apollo-server';
+
+
 export default {
     Query: {
-        homeworks: () => {
-            const data = {
-                id: "asdafijgifd5373jgfd",
-                title: "作業1",
-                description: "七彩霓虹燈",
-                course: {
-                    id: "21312eqweqwe123123",
-                    name: "創意科技",
-                    teacher: { hello: "world" },
-                    class: "資工二甲",
-                    subject: "COMPULSORY",
-                    campus: "八甲",
-                    time: {
-                        start: 1,
-                        end: 3
-                    },
-                    room: "lab305",
-                    subjectCode: "abc123",
-                    courseCode: "def456",
-                    accessNumber: 55,
-                    selectNumber: 42,
-                    credit: 3
-                },
-                createAt: 1540524273471,
-                start: 1540524273471,
-                end: 1540524273471
+        homeworks: (root, args, ctx) => {
+            return ctx.db.Homework.find().populate(['course', 'createBy'])
+        }
+    },
+    Mutation: {
+        newHomework: (root, args, ctx) => {
+            if (!ctx.user) return new AuthenticationError('You must be logged in to create the course!')
+            if (ctx.user.scope === 'ADMIN' || ctx.user.scope === 'TA') {
+                const homework = new ctx.db.Homework({
+                    ...args.data,
+                    createAt: Date.now(),
+                    createBy: ctx.user._id
+                })
+                homework.populate(['course', 'createBy']).execPopulate();
+                return homework.save()
             }
-            return [data]
         }
     }
 }

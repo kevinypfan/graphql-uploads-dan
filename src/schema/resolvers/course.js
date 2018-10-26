@@ -1,48 +1,31 @@
+import {
+    AuthenticationError,
+    UserInputError,
+    ApolloError,
+    ForbiddenError
+} from 'apollo-server';
+
 export default {
     Query: {
-        Courses: () => {
-            const data = {
-                id: "21312eqweqwe123123",
-                name: "創意科技",
-                teacher: { hello: "world" },
-                class: "資工二甲",
-                subject: "COMPULSORY",
-                campus: "八甲",
-                time: {
-                    start: 1,
-                    end: 3
-                },
-                room: "lab305",
-                subjectCode: "abc123",
-                courseCode: "def456",
-                accessNumber: 55,
-                selectNumber: 42,
-                credit: 3
-            }
-            return [data]
+        Courses: (root, args, ctx) => {
+            return ctx.db.Course.find().populate('createBy')
         }
     },
     Mutation: {
         newCourse: (root, args, ctx) => {
-            const data = {
-                id: "21312eqweqwe123123",
-                name: "創意科技",
-                teacher: { hello: "world" },
-                class: "資工二甲",
-                subject: "COMPULSORY",
-                campus: "八甲",
-                time: {
-                    start: 1,
-                    end: 3
-                },
-                room: "lab305",
-                subjectCode: "abc123",
-                courseCode: "def456",
-                accessNumber: 55,
-                selectNumber: 42,
-                credit: 3
+            if (!ctx.user) return new AuthenticationError('You must be logged in to create the course!')
+            if (ctx.user.scope === 'ADMIN') {
+                const course = new ctx.db.Course({
+                    ...args.data,
+                    createAt: Date.now(),
+                    createBy: ctx.user._id
+                })
+                course.populate('createBy').execPopulate();
+                return course.save().then(result => {
+                    return result
+                })
             }
-            return data
+            return new ForbiddenError("You must be an administrator to create the course!")
         }
     }
 }

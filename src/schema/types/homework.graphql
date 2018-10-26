@@ -8,8 +8,22 @@ type Homework {
     createAt: Date
     start: Date
     end: Date
+    createBy: User
 }
 
 type Query {
     homeworks: [Homework]
+}
+type Mutation {
+    newHomework(
+        data: newHomeworkInput
+    ): Homework
+}
+
+input newHomeworkInput {
+    title: String!
+    description: String
+    course: ID!
+    start: Date
+    end: Date
 }

@@ -38,26 +38,14 @@ type Course {
     selectNumber: Int!
     credit: Int!
     students: [Student]
+    createBy: User!
+    createAt: Date!
 }
 
 type Query {
     Courses: [Course]
 }
 
-input newCourseInput {
-    name: String!
-    teacher: TeacherInput!
-    class: String
-    campus: String!
-    time: CourseTimeInput!
-    room: String!
-    subjectCode: ID!
-    courseCode: ID!
-    accessNumber: Int!
-    selectNumber: Int!
-    credit: Int!
-    studentExcel: Upload!
-}
 
 input TeacherInput {
     firstname: String!
@@ -69,8 +57,23 @@ input CourseTimeInput {
     end: Int
 }
 
+
+input newCourseInput {
+    name: String!
+    teacher: TeacherInput!
+    class: String
+    campus: String!
+    time: CourseTimeInput!
+    subject: AllowedSubject!
+    room: String!
+    subjectCode: ID!
+    courseCode: ID!
+    accessNumber: Int!
+    selectNumber: Int!
+    credit: Int!
+    studentsExcel: Upload
+}
+
 type Mutation {
-    newCourse(
-        data: newCourseInput
-    ): Course
+    newCourse( data: newCourseInput ): Course
 }
