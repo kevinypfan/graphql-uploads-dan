@@ -3,11 +3,11 @@ import {
     UserInputError,
     ApolloError,
     ForbiddenError
-} from 'apollo-server';
+} from 'apollo-server-express';
 
 export default {
     Query: {
-        Courses: (root, args, ctx) => {
+        courses: (root, args, ctx) => {
             return ctx.db.Course.find().populate('createBy')
         }
     },
@@ -27,5 +27,8 @@ export default {
             }
             return new ForbiddenError("You must be an administrator to create the course!")
         }
+    },
+    Course: {
+        selectNumber: (root) => root.students.length
     }
 }

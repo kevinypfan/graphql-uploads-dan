@@ -2,7 +2,6 @@ type User {
   id: ID
   username: String!
   studentId: String!
-  password: String!
   scope: String!
   tokens: [Token]
 }
@@ -25,12 +24,10 @@ type Mutation {
     username: String,
     studentId: String,
     password: String,
-    device: String
   ): User
   login(
     studentId: String,
     password: String,
-    device: String
   ): User
   logout: LogoutResponse
 }

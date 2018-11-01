@@ -3,15 +3,34 @@ scalar Upload
 
 type Assignment {
     id: ID!
-    homework: Homework
-    user: User
-    file: Upload
+    homework: Homework!
+    createBy: User!
+    course: Course!
+    file: File
     score: Int
+    oldFile: [File]
 }
 
+type File {
+  id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+  timestamp: Date!
+}
 
-
+input sendAssignmentInput {
+    course: ID!
+    homework: ID!
+    file: Upload!
+}
 
 type Query {
     assignments: [Assignment]
+}
+
+
+type Mutation {
+    sendAssignment(data: sendAssignmentInput): Assignment
 }

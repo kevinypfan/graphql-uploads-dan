@@ -2,12 +2,11 @@ import {
   AuthenticationError,
   UserInputError,
   ApolloError
-} from 'apollo-server';
+} from 'apollo-server-express';
 
 export default {
   Query: {
     checkToken: async (root, args, ctx) => {
-      console.log(ctx.user)
       if (await ctx.user === null) {
         return new AuthenticationError("You need to be authenticated to access this schema!")
       }
@@ -16,7 +15,9 @@ export default {
   },
   Mutation: {
     signup: async (root, args, ctx) => {
-      const { username, studentId, password, device } = args;
+
+      const device = ctx.req.get('user-agent');
+      const { username, studentId, password } = args;
       const requestIp = ctx.req.connection.remoteAddress;
       const newUser = new ctx.db.User({ username, studentId, password, scope: 'student' })
       try {
@@ -28,8 +29,9 @@ export default {
         throw new Error(err)
       }
     },
-    login: async (root, args, { db, req, res }) => {
-      const { studentId, password, device } = args;
+    login: async (root, args, { db, req, res, pubsub }) => {
+      const device = req.get('user-agent');
+      const { studentId, password } = args;
       const requestIp = req.connection.remoteAddress;
       try {
         const authUser = await db.User.findByCredentials(studentId, password)
@@ -41,7 +43,6 @@ export default {
       }
     },
     logout: (root, args, ctx) => {
-      console.log(ctx.user)
       if (!ctx.user) { throw new Error("您尚未登入！") }
       return ctx.user.updateOne({
         $pull: {

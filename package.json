@@ -7,14 +7,18 @@
     "dev": "nodemon ./src/app.js --exec babel-node -e js,graphql,json"
   },
   "dependencies": {
-    "apollo-server": "^2.1.0",
+    "apollo-server-express": "^2.1.0",
     "babel-cli": "^6.26.0",
     "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.0",
     "jsonwebtoken": "^8.3.0",
     "merge-graphql-schemas": "^1.5.7",
-    "mongoose": "^5.3.4"
+    "mkdirp": "^0.5.1",
+    "mongoose": "^5.3.4",
+    "morgan": "^1.9.1",
+    "shortid": "^2.2.13"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",

@@ -22,14 +22,9 @@ const schema = new mongoose.Schema({
         required: true
     },
     campus: { type: String },
-    time: {
-        start: Number,
-        end: Number
-    },
     room: { type: String, required: true },
     subjectCode: { type: String, required: true },
-    courseCode: { type: String, required: true },
-    accessNumber: { type: Number, required: true },
+    courseCode: { type: String, required: true, unique: true },
     selectNumber: { type: Number, required: true },
     credit: { type: Number, required: true },
     students: [{

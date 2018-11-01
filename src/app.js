@@ -1,12 +1,22 @@
 import './config/config'
 import mongoose from 'mongoose'
-import { ApolloServer } from 'apollo-server'
+import express from 'express'
+import { ApolloServer } from 'apollo-server-express'
+import fs from 'fs'
+import https from 'https'
+import http from 'http'
 import schema from './schema'
 import { authentication } from './utilts/authentication'
 import db from './models/db'
 import initApp from './utilts/initApp'
+import pubsub from './utilts/pubsub'
+import { processUpload } from './utilts/upload'
+import { sync } from 'mkdirp'
+import morgan from 'morgan'
 
 
+const app = express();
+app.use(morgan('dev'))
 mongoose.connect('mongodb://localhost/danUpload', { useNewUrlParser: true }).then(() => {
   console.log("Connected to Database!")
   return initApp()
@@ -24,11 +34,9 @@ mongoose.set('useCreateIndex', true);
 const context = async ({ req, res }) => {
   try {
     const { user, token } = await authentication(req)
-    let ctx;
-    if (!user) {
-      ctx = { req, res, db }
-    } else {
-      ctx = { req, res, user, token, db }
+    let ctx = { req, res, db, pubsub, processUpload, sync };
+    if (user) {
+      ctx = { ...ctx, user, token }
     }
     return ctx
   } catch (err) {
@@ -36,12 +44,31 @@ const context = async ({ req, res }) => {
   }
 };
 
-const server = new ApolloServer({ schema, context });
+const apolloServer = new ApolloServer({ schema, context });
+apolloServer.applyMiddleware({ app })
 
-// This `listen` method launches a web-server.  Existing apps
-// can utilize middleware options, which we'll discuss later.
+let server;
 
-server.listen(process.env.PORT).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+if (process.env.SSL == false) {
+  server = https.createServer(
+    {
+      key: fs.readFileSync(`./ssl/server.key`),
+      cert: fs.readFileSync(`./ssl/server.crt`)
+    },
+    app
+  )
+}
+server = http.createServer(app)
 
+// Add subscription support
+apolloServer.installSubscriptionHandlers(server)
+
+
+server.listen({ port: process.env.PORT }, () => {
+  console.log(
+    '🚀 Server ready at',
+    `http${process.env.SSL ? 's' : ''}://${process.env.HOSTNAME}:${process.env.PORT}${apolloServer.graphqlPath}\n`,
+    `🚀 Subscriptions ready at ws://${process.env.HOSTNAME}:${process.env.PORT}${apolloServer.subscriptionsPath}`
+  )
+}
+)

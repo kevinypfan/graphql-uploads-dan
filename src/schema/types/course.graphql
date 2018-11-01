@@ -11,11 +11,6 @@ type Teacher {
     lastname: String!
 }
 
-type CourseTime {
-    start: Int,
-    end: Int
-}
-
 type Student {
     id: ID
     studentId: ID
@@ -29,49 +24,37 @@ type Course {
     class: String!
     subject: AllowedSubject!
     campus: String!
-    time: CourseTime!
     room: String!
     subjectCode: ID!
     courseCode: ID!
     id: ID!
-    accessNumber: Int!
-    selectNumber: Int!
     credit: Int!
     students: [Student]
     createBy: User!
     createAt: Date!
+    selectNumber: Int!
 }
-
-type Query {
-    Courses: [Course]
-}
-
-
-input TeacherInput {
-    firstname: String!
-    lastname: String!
-}
-
-input CourseTimeInput {
-    start: Int,
-    end: Int
-}
-
 
 input newCourseInput {
     name: String!
     teacher: TeacherInput!
     class: String
     campus: String!
-    time: CourseTimeInput!
     subject: AllowedSubject!
     room: String!
     subjectCode: ID!
     courseCode: ID!
-    accessNumber: Int!
-    selectNumber: Int!
     credit: Int!
-    studentsExcel: Upload
+    studentsExcel: Upload!
+}
+
+type Query {
+    courses: [Course]
+}
+
+input TeacherInput {
+    firstname: String!
+    lastname: String!
 }
 
 type Mutation {

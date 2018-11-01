@@ -1,0 +1,6 @@
+scalar Upload
+
+
+type Mutation {
+  singleUpload (file: Upload!): File!
+}

@@ -1,0 +1,51 @@
+type Query {
+    # Retrieve Events at a specific Venue
+    findEventsAtVenue(venueId: ID!): [Event]
+}
+
+type Venue {
+    id: ID!
+    name: String
+    address: String
+    maxOccupancy: Int
+}
+
+type Concert implements Event {
+    id: ID!
+    name: String!
+    startsAt: String
+    endsAt: String
+    venue: Venue
+    minAgeRestriction: Int
+    performingBand: String
+}
+
+interface Event {
+    id: ID!
+    name: String!
+    startsAt: String
+    endsAt: String
+    venue: Venue
+    minAgeRestriction: Int
+}
+
+type Festival implements Event {
+    id: ID!
+    name: String!
+    startsAt: String
+    endsAt: String
+    venue: Venue
+    minAgeRestriction: Int
+    performers: [String]
+}
+
+type Conference implements Event {
+    id: ID!
+    name: String!
+    startsAt: String
+    endsAt: String
+    venue: Venue
+    minAgeRestriction: Int
+    speakers: [String]
+    workshops: [String]
+}

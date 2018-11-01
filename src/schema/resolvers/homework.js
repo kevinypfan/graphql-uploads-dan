@@ -3,7 +3,7 @@ import {
     UserInputError,
     ApolloError,
     ForbiddenError
-} from 'apollo-server';
+} from 'apollo-server-express';
 
 
 export default {

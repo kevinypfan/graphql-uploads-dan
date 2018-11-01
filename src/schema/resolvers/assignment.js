@@ -1,3 +1,5 @@
+import path from 'path'
+
 export default {
     Query: {
         assignments: () => {
@@ -41,6 +43,20 @@ export default {
                 score: 30
             }
             return [data]
+        }
+    },
+    Mutation: {
+        sendAssignment: (root, args, ctx) => {
+            console.log(args.data)
+            const fileData = ctx.processUpload(path.resolve(__dirname, '../../uploads/assignment'), args.data.file)
+            const assignment = new ctx.db.Assignment({
+                course: args.data.course,
+                homework: args.data.homework,
+                createBy: ctx.user._id,
+                file: fileData
+            })
+            assignment.populate(['createBy', 'course', 'homework']).execPopulate();
+            return assignment.save()
         }
     }
 }

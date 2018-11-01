@@ -1,6 +1,8 @@
 {
   "development": {
     "PORT": 4000,
-    "JWT_SECRET": "abc123"
+    "JWT_SECRET": "abc123",
+    "SSL": false,
+    "HOSTNAME": "localhost"
   }
 }
