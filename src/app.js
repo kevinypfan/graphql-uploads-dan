@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost/danUpload', { useNewUrlParser: true }).the
   return initApp()
 }).then(({ message, admin }) => {
   console.log(`message: ${message}, 
-  admin: ${admin}`)
+  admin: ${admin.studentId}`)
 }).catch((err) => {
   console.log("Not Connected to Database ERROR! ", err);
 });
@@ -40,7 +40,7 @@ const context = async ({ req, res }) => {
   }
 };
 
-const apolloServer = new ApolloServer({ schema, context });
+const apolloServer = new ApolloServer({ schema, context, cors: true });
 apolloServer.applyMiddleware({ app })
 
 let server;

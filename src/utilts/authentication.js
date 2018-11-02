@@ -1,13 +1,12 @@
 import User from '../models/user'
 
 export const authentication = async (req) => {
-  if (req.headers.hasOwnProperty('authorization')) {
-    var token = req.headers['authorization'];
-    if (token) {
-      const user = await User.findByToken(token)
-      return { user, token };
-    }
+  if (req == undefined || req == null) return false
+  var token = req.headers['authorization'];
+  if (!token) return false
+  if (token) {
+    const user = await User.findByToken(token)
+    return { user, token };
   }
-  return false
 }
 

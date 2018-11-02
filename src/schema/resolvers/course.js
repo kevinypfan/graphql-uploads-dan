@@ -20,8 +20,10 @@ export default {
     },
     Query: {
         courses: (root, args, ctx) => {
-            console.log("query: ", ctx.user._id)
             return ctx.db.Course.find().populate('createBy')
+        },
+        couseByCourseCode: (root, args, ctx) => {
+            return ctx.db.Course.findOne({ courseCode: args.courseCode }).populate('createBy')
         }
     },
     Mutation: {
@@ -54,7 +56,7 @@ export default {
                     pubsub.publish('courseAddedData', { courseAddedData: result })
                     pubsub.publish('courseAddedNotify', {
                         courseAddedNotify: {
-                            icon: 'call_to_action',
+                            icon: 'notifications',
                             message: `${result.teacher.firstname}老師的"${result.name}"課程，已經新增了！`,
                             timestamp: Date.now()
                         }

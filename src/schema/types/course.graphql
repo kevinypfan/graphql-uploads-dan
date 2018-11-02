@@ -50,6 +50,7 @@ input newCourseInput {
 
 type Query {
     courses: [Course]
+    couseByCourseCode(courseCode: String!): Course!
 }
 
 input TeacherInput {
