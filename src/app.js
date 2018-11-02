@@ -9,7 +9,6 @@ import schema from './schema'
 import { authentication } from './utilts/authentication'
 import db from './models/db'
 import initApp from './utilts/initApp'
-import pubsub from './utilts/pubsub'
 import { processUpload } from './utilts/upload'
 import { sync } from 'mkdirp'
 import morgan from 'morgan'
@@ -31,7 +30,7 @@ mongoose.set('useCreateIndex', true);
 const context = async ({ req, res }) => {
   try {
     const { user, token } = await authentication(req)
-    let ctx = { req, res, db, pubsub, processUpload, sync };
+    let ctx = { req, res, db, processUpload, sync };
     if (user) {
       ctx = { ...ctx, user, token }
     }

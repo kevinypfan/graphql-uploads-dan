@@ -7,9 +7,20 @@ import {
 import { readXlsxParse } from '../../utilts/xlsxParse'
 import path from 'path'
 import fs from 'fs'
+import pubsub from '../../utilts/pubsub'
+
 export default {
+    Subscription: {
+        courseAddedData: {
+            subscribe: () => pubsub.asyncIterator('courseAddedData'),
+        },
+        courseAddedNotify: {
+            subscribe: () => pubsub.asyncIterator('courseAddedNotify'),
+        },
+    },
     Query: {
         courses: (root, args, ctx) => {
+            console.log("query: ", ctx.user._id)
             return ctx.db.Course.find().populate('createBy')
         }
     },
@@ -40,6 +51,14 @@ export default {
                 })
                 course.populate('createBy').execPopulate();
                 return course.save().then(result => {
+                    pubsub.publish('courseAddedData', { courseAddedData: result })
+                    pubsub.publish('courseAddedNotify', {
+                        courseAddedNotify: {
+                            icon: 'call_to_action',
+                            message: `${result.teacher.firstname}老師的"${result.name}"課程，已經新增了！`,
+                            timestamp: Date.now()
+                        }
+                    })
                     return result
                 })
             }

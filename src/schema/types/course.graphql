@@ -60,3 +60,12 @@ input TeacherInput {
 type Mutation {
     newCourse( data: newCourseInput ): Course
 }
+type Notification {
+    icon: String,
+    message: String,
+    timestamp: Date
+}
+type Subscription {
+    courseAddedData: Course
+    courseAddedNotify: Notification
+}
