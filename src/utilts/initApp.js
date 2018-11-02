@@ -9,9 +9,10 @@ const initApp = async () => {
             password: "abc123",
             scope: "ADMIN"
         })
-        return newUser.save()
+        return { admin: await newUser.save(), message: "Init success!" }
     }
     return {
+        admin: await User.findOne({ scope: "ADMIN" }),
         message: "Already have ADMIN account!"
     }
 }

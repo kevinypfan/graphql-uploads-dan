@@ -25,7 +25,6 @@ const schema = new mongoose.Schema({
     room: { type: String, required: true },
     subjectCode: { type: String, required: true },
     courseCode: { type: String, required: true, unique: true },
-    selectNumber: { type: Number, required: true },
     credit: { type: Number, required: true },
     students: [{
         studentId: String,

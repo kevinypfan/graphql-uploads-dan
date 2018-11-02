@@ -20,12 +20,9 @@ app.use(morgan('dev'))
 mongoose.connect('mongodb://localhost/danUpload', { useNewUrlParser: true }).then(() => {
   console.log("Connected to Database!")
   return initApp()
-}).then(user => {
-  if (user.message) {
-    console.log(user.message)
-  } else {
-    console.log(user._id)
-  }
+}).then(({ message, admin }) => {
+  console.log(`message: ${message}, 
+  admin: ${admin}`)
 }).catch((err) => {
   console.log("Not Connected to Database ERROR! ", err);
 });

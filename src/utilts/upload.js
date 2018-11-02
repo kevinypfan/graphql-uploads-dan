@@ -24,6 +24,7 @@ const storeUpload = async ({ stream, filename, path }) => {
 }
 
 export async function processUpload(path, file) {
+    console.log(file)
     const { stream, filename, mimetype, encoding } = await file
     const { id, filePath } = await storeUpload({ stream, filename, path })
     return { id, filename, mimetype, encoding, path: filePath, timestamp: Date.now() }

@@ -4,7 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./src/app.js --exec babel-node -e js,graphql,json"
+    "dev": "nodemon ./src/app.js --exec babel-node -e js,graphql,json",
+    "seeder": "babel-node ./src/seed/course-seeder.js",
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "babel src -d dist --copy-files",
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "apollo-server-express": "^2.1.0",
