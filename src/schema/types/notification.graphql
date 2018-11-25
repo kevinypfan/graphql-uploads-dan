@@ -1,0 +1,10 @@
+type Notification {
+    icon: String,
+    message: String,
+    timestamp: Date
+}
+
+
+type Subscription {
+    addedNotify: Notification
+}

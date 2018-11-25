@@ -13,17 +13,15 @@ export default {
     Subscription: {
         courseAddedData: {
             subscribe: () => pubsub.asyncIterator('courseAddedData'),
-        },
-        courseAddedNotify: {
-            subscribe: () => pubsub.asyncIterator('courseAddedNotify'),
-        },
+        }
     },
     Query: {
         courses: (root, args, ctx) => {
             return ctx.db.Course.find().populate('createBy')
         },
-        couseByCourseCode: (root, args, ctx) => {
-            return ctx.db.Course.findOne({ courseCode: args.courseCode }).populate('createBy')
+        courseById: (root, args, ctx) => {
+            console.log(args.course)
+            return ctx.db.Course.findOne({ _id: args.course }).populate('createBy')
         }
     },
     Mutation: {
@@ -54,8 +52,8 @@ export default {
                 course.populate('createBy').execPopulate();
                 return course.save().then(result => {
                     pubsub.publish('courseAddedData', { courseAddedData: result })
-                    pubsub.publish('courseAddedNotify', {
-                        courseAddedNotify: {
+                    pubsub.publish('addedNotify', {
+                        addedNotify: {
                             icon: 'notifications',
                             message: `${result.teacher.firstname}老師的"${result.name}"課程，已經新增了！`,
                             timestamp: Date.now()

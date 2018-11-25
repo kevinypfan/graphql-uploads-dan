@@ -50,7 +50,7 @@ input newCourseInput {
 
 type Query {
     courses: [Course]
-    couseByCourseCode(courseCode: String!): Course!
+    courseById(course: ID!): Course!
 }
 
 input TeacherInput {
@@ -61,12 +61,7 @@ input TeacherInput {
 type Mutation {
     newCourse( data: newCourseInput ): Course
 }
-type Notification {
-    icon: String,
-    message: String,
-    timestamp: Date
-}
+
 type Subscription {
     courseAddedData: Course
-    courseAddedNotify: Notification
 }
